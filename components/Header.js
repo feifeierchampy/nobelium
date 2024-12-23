@@ -11,10 +11,11 @@ const NavBar = () => {
   const links = [
     { id: 0, name: locale.NAV.INDEX, to: BLOG.path || '/', show: true },
     { id: 1, name: locale.NAV.ABOUT, to: '/about', show: BLOG.showAbout },
-    { id: 2, name: locale.NAV.RSS, to: '/feed', show: true, external: true },
-    { id: 3, name: locale.NAV.SEARCH, to: '/search', show: true },
-    { id: 4, name: locale.NAV.TOOLS, to: 'tools.feifeier.com', show: true, external: true },
-    { id: 5, name: locale.NAV.APPS, to: 'www.freoza.com', show: true, external: true}
+    { id: 2, name: locale.NAV.TOOLS, to: 'https://tools.feifeier.com', show: true, external: true },
+    { id: 3, name: locale.NAV.APPS, to: 'https://www.freoza.com', show: true, external: true},
+    { id: 4, name: locale.NAV.RSS, to: '/feed', show: true, external: true },
+    { id: 5, name: locale.NAV.SEARCH, to: '/search', show: true }
+
   ]
   return (
     <div className="flex-shrink-0">
