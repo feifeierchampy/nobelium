@@ -2,10 +2,10 @@
   "NAV": {
     "INDEX": "主页",
     "RSS": "RSS",
-    "SEARCH": "Search",
-    "ABOUT": "About",
-    "TOOLS": "Tools",
-    "APPS": "Apps"
+    "SEARCH": "搜索",
+    "ABOUT": "关于",
+    "TOOLS": "工具",
+    "APPS": "APP"
   },
   "PAGINATION": {
     "PREV": "上一页",
