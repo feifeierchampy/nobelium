@@ -3,7 +3,9 @@
     "INDEX": "主页",
     "RSS": "RSS",
     "SEARCH": "搜索",
-    "ABOUT": "关于"
+    "ABOUT": "关于",
+    "TOOLS": "Tools",
+    "APPS": "我的Apps"
   },
   "PAGINATION": {
     "PREV": "上一页",
