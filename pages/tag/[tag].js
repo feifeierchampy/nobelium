@@ -1,4 +1,4 @@
-import { getAllPosts, getAllTagsFromPosts } from '@/lib/notion'
+import { fillPostSummaries, getAllPosts, getAllTagsFromPosts } from '@/lib/notion'
 import SearchLayout from '@/layouts/search'
 
 export default function Tag ({ tags, posts, currentTag }) {
@@ -12,6 +12,7 @@ export async function getStaticProps ({ params }) {
   const filteredPosts = posts.filter(
     post => post && post.tags && post.tags.includes(currentTag)
   )
+  await fillPostSummaries(filteredPosts)
   return {
     props: {
       tags,

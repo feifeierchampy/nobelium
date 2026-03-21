@@ -3,7 +3,7 @@ import { config } from '@/lib/server/config'
 import Container from '@/components/Container'
 import BlogPost from '@/components/BlogPost'
 import Pagination from '@/components/Pagination'
-import { getAllPosts } from '@/lib/notion'
+import { fillPostSummaries, getAllPosts } from '@/lib/notion'
 
 const Page = ({ postsToShow, page, showNext }) => {
   return (
@@ -22,6 +22,7 @@ export async function getStaticProps (context) {
     config.postsPerPage * (page - 1),
     config.postsPerPage * page
   )
+  await fillPostSummaries(postsToShow)
   const totalPosts = posts.length
   const showNext = page * config.postsPerPage < totalPosts
   return {

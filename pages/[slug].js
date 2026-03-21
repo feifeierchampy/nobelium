@@ -6,6 +6,7 @@ import { getAllPosts, getPostBlocks } from '@/lib/notion'
 import { useLocale } from '@/lib/locale'
 import { useConfig } from '@/lib/config'
 import { createHash } from 'crypto'
+import { getPageContentBlockIds, getTextContent } from 'notion-utils'
 import Container from '@/components/Container'
 import Post from '@/components/Post'
 import Comments from '@/components/Comments'
@@ -85,6 +86,22 @@ export async function getStaticProps ({ params: { slug } }) {
   if (!post) return { notFound: true }
 
   const blockMap = await getPostBlocks(post.id)
+  if (!(post.summary || '').trim()) {
+    const summaryLength = clientConfig.summaryLength || 200
+    const contentBlockIds = getPageContentBlockIds(blockMap) || []
+    let summary = ''
+    for (let i = 0; i < contentBlockIds.length; i++) {
+      const blockId = contentBlockIds[i]
+      const title = blockMap?.block?.[blockId]?.value?.properties?.title
+      const text = getTextContent(title)
+      if (text) {
+        summary = `${summary} ${text}`
+        summary = summary.replace(/\s+/g, ' ').trim()
+        if (summary.length >= summaryLength) break
+      }
+    }
+    post.summary = summary.slice(0, summaryLength).trim()
+  }
   const emailHash = createHash('md5')
     .update(clientConfig.email)
     .digest('hex')
