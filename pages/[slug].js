@@ -90,6 +90,7 @@ export async function getStaticProps ({ params: { slug } }) {
     const summaryLength = clientConfig.summaryLength || 200
     const contentBlockIds = getPageContentBlockIds(blockMap) || []
     let summary = ''
+    let reachedLimit = false
     for (let i = 0; i < contentBlockIds.length; i++) {
       const blockId = contentBlockIds[i]
       const title = blockMap?.block?.[blockId]?.value?.properties?.title
@@ -97,10 +98,19 @@ export async function getStaticProps ({ params: { slug } }) {
       if (text) {
         summary = `${summary} ${text}`
         summary = summary.replace(/\s+/g, ' ').trim()
-        if (summary.length >= summaryLength) break
+        if (summary.length >= summaryLength) {
+          reachedLimit = i < contentBlockIds.length - 1 || summary.length > summaryLength
+          break
+        }
       }
     }
-    post.summary = summary.slice(0, summaryLength).trim()
+    if (reachedLimit && summaryLength > 3) {
+      post.summary = `${summary.slice(0, summaryLength - 3).trimEnd()}...`
+    } else if (reachedLimit) {
+      post.summary = summary.slice(0, summaryLength).trim()
+    } else {
+      post.summary = summary
+    }
   }
   const emailHash = createHash('md5')
     .update(clientConfig.email)
