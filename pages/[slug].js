@@ -7,6 +7,7 @@ import { useLocale } from '@/lib/locale'
 import { useConfig } from '@/lib/config'
 import { createHash } from 'crypto'
 import { getPageContentBlockIds, getTextContent } from 'notion-utils'
+import { buildSummaryFromBlocks } from '@/lib/notion/summary'
 import Container from '@/components/Container'
 import Post from '@/components/Post'
 import Comments from '@/components/Comments'
@@ -89,28 +90,12 @@ export async function getStaticProps ({ params: { slug } }) {
   if (!(post.summary || '').trim()) {
     const summaryLength = clientConfig.summaryLength || 200
     const contentBlockIds = getPageContentBlockIds(blockMap) || []
-    let summary = ''
-    let reachedLimit = false
-    for (let i = 0; i < contentBlockIds.length; i++) {
-      const blockId = contentBlockIds[i]
-      const title = blockMap?.block?.[blockId]?.value?.properties?.title
-      const text = getTextContent(title)
-      if (text) {
-        summary = `${summary} ${text}`
-        summary = summary.replace(/\s+/g, ' ').trim()
-        if (summary.length >= summaryLength) {
-          reachedLimit = i < contentBlockIds.length - 1 || summary.length > summaryLength
-          break
-        }
-      }
-    }
-    if (reachedLimit && summaryLength > 3) {
-      post.summary = `${summary.slice(0, summaryLength - 3).trimEnd()}...`
-    } else if (reachedLimit) {
-      post.summary = summary.slice(0, summaryLength).trim()
-    } else {
-      post.summary = summary
-    }
+    post.summary = buildSummaryFromBlocks({
+      blockMap,
+      contentBlockIds,
+      length: summaryLength,
+      getTextContent
+    })
   }
   const emailHash = createHash('md5')
     .update(clientConfig.email)
