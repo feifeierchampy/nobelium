@@ -17,7 +17,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "postbuild": "echo \"sitemap.xml and robots.txt are generated dynamically\""
+    "postbuild": "next-sitemap --config next-sitemap.config.js"
   },
   "dependencies": {
     "axios": "^1.6.1",

@@ -1,7 +1,7 @@
 const { config }  = require('./lib/server/config')
 
 module.exports = {
-  siteUrl: config.link.replace(/\/$/, ''),
+  siteUrl: config.link,
   generateRobotsTxt: true,
   sitemapSize: 7000,
   generateIndexSitemap: false
