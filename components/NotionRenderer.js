@@ -96,7 +96,10 @@ const components = {
   )
 }
 
-const mapPageUrl = id => `https://www.notion.so/${id.replace(/-/g, '')}`
+const mapPageUrl = id => {
+  if (!id) return 'https://www.notion.so'
+  return `https://www.notion.so/${id.replace(/-/g, '')}`
+}
 
 /**
  * Notion page renderer
@@ -115,7 +118,8 @@ export default function NotionRenderer (props) {
 
   // Mark block types to be custom rendered by appending a suffix
   if (props.recordMap) {
-    for (const { value: block } of Object.values(props.recordMap.block)) {
+    for (const [id, { value: block }] of Object.entries(props.recordMap.block || {})) {
+      if (block && !block.id) block.id = id
       switch (block?.type) {
         case 'toggle':
           block.type += '_nobelium'
